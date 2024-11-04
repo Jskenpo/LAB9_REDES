@@ -11,8 +11,7 @@ from collections import deque
 consumer = KafkaConsumer(
     '21153',
     bootstrap_servers='164.92.76.15:9092',
-    value_deserializer=lambda x: x,  # Recibimos bytes en lugar de JSON
-    auto_offset_reset='earliest'     # Configurar a 'earliest' para leer mensajes antiguos
+    value_deserializer=lambda x: x,  # Recibir los datos binarios sin transformar
 )
 
 print("Consumer initialized and connected to Kafka broker.")
@@ -56,8 +55,6 @@ ax3.legend()
 for ax in [ax1, ax2, ax3]:
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M:%S'))
     plt.setp(ax.xaxis.get_majorticklabels(), rotation=45)
-
-print("Matplotlib figure and axes configured.")
 
 # Decodificación de datos de 3 bytes
 def decode_message(encoded_message):

@@ -4,13 +4,10 @@ import numpy as np
 import struct
 import time 
 
-
-
-
 # Configuración del productor
 producer = KafkaProducer(
     bootstrap_servers='164.92.76.15:9092',
-    value_serializer=lambda v: v  # Enviará bytes en lugar de JSON
+    value_serializer=lambda v: v  # Enviar los datos binarios sin transformar
 )
 
 # Lista de direcciones de viento posibles
