@@ -2,6 +2,10 @@ from kafka import KafkaProducer
 import random
 import numpy as np
 import struct
+import time 
+
+
+
 
 # Configuración del productor
 producer = KafkaProducer(
@@ -21,7 +25,7 @@ def encode_message(temp, humidity, wind_direction):
 
     # Construir los 3 bytes
     packed_data = (temp_int << 10) | (humidity_int << 3) | wind_int
-    return struct.pack('>I', packed_data)[1:]
+    return struct.pack('>I', packed_data)[1:]  # Mantén solo los últimos 3 bytes
 
 # Función que genera datos simulados de los sensores
 def generate_sensor_data():
@@ -35,10 +39,13 @@ def main():
     print("Starting Weather Station Producer...")
     try:
         while True:
+            # Generar datos del sensor y codificarlos en 3 bytes
             temp, humidity, wind = generate_sensor_data()
             encoded_message = encode_message(temp, humidity, wind)
+            
+            # Enviar el mensaje codificado (3 bytes)
             producer.send('21153', value=encoded_message)
-            print(f"Sent: Temp={temp}°C, Humidity={humidity}%, Wind={wind}")
+            print(f"Sent: Encoded Message={encoded_message.hex()}, Temp={temp}°C, Humidity={humidity}%, Wind={wind}")
             
             time.sleep(random.uniform(5, 10))
             
