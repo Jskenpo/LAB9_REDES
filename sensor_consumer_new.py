@@ -99,13 +99,21 @@ def update_plot(frame):
         humidities.append(humidity)
         wind_directions.append(wind_direction_to_number(wind))
 
-        # Actualizar las líneas de gráficos
+        # Actualizar las líneas de gráficos de temperatura y humedad
         temp_line.set_data(timestamps, temperatures)
         humidity_line.set_data(timestamps, humidities)
 
+        # Ajustar automáticamente el rango de los ejes de temperatura y humedad
+        if temperatures:
+            ax1.set_ylim(min(temperatures) - 1, max(temperatures) + 1)
+        if humidities:
+            ax2.set_ylim(min(humidities) - 1, max(humidities) + 1)
+
+        # Actualizar la gráfica de dirección de viento
         if timestamps and wind_directions:
             wind_scatter.set_offsets(list(zip(mdates.date2num(timestamps), wind_directions)))
         
+        # Ajustar el rango del eje X para todas las gráficas
         for ax in [ax1, ax2, ax3]:
             ax.set_xlim(mdates.date2num(min(timestamps)), mdates.date2num(max(timestamps)))
         
